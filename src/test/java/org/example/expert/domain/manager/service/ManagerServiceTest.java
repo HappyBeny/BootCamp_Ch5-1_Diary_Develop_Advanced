@@ -10,9 +10,9 @@ import java.util.List;
 import java.util.Optional;
 import org.example.expert.domain.common.dto.AuthUser;
 import org.example.expert.domain.common.exception.InvalidRequestException;
-import org.example.expert.domain.manager.dto.request.ManagerSaveRequest;
-import org.example.expert.domain.manager.dto.response.ManagerResponse;
-import org.example.expert.domain.manager.dto.response.ManagerSaveResponse;
+import org.example.expert.domain.manager.dto.request.ManagerSaveRequestDto;
+import org.example.expert.domain.manager.dto.response.ManagerResponseDto;
+import org.example.expert.domain.manager.dto.response.ManagerSaveResponseDto;
 import org.example.expert.domain.manager.entity.Manager;
 import org.example.expert.domain.manager.repository.ManagerRepository;
 import org.example.expert.domain.todo.entity.Todo;
@@ -60,7 +60,7 @@ class ManagerServiceTest {
         Todo todo = new Todo();
         ReflectionTestUtils.setField(todo, "user", null);
 
-        ManagerSaveRequest managerSaveRequest = new ManagerSaveRequest(managerUserId);
+        ManagerSaveRequestDto managerSaveRequest = new ManagerSaveRequestDto(managerUserId);
 
         given(todoRepository.findById(todoId)).willReturn(Optional.of(todo));
 
@@ -87,7 +87,7 @@ class ManagerServiceTest {
         given(managerRepository.findAllByTodoId(todoId)).willReturn(managerList);
 
         // when
-        List<ManagerResponse> managerResponses = managerService.getManagers(todoId);
+        List<ManagerResponseDto> managerResponses = managerService.getManagers(todoId);
 
         // then
         assertEquals(1, managerResponses.size());
@@ -108,14 +108,14 @@ class ManagerServiceTest {
         User managerUser = new User("b@b.com", "password", UserRole.USER);  // 매니저로 등록할 유저
         ReflectionTestUtils.setField(managerUser, "id", managerUserId);
 
-        ManagerSaveRequest managerSaveRequest = new ManagerSaveRequest(managerUserId); // request dto 생성
+        ManagerSaveRequestDto managerSaveRequest = new ManagerSaveRequestDto(managerUserId); // request dto 생성
 
         given(todoRepository.findById(todoId)).willReturn(Optional.of(todo));
         given(userRepository.findById(managerUserId)).willReturn(Optional.of(managerUser));
         given(managerRepository.save(any(Manager.class))).willAnswer(invocation -> invocation.getArgument(0));
 
         // when
-        ManagerSaveResponse response = managerService.saveManager(authUser, todoId, managerSaveRequest);
+        ManagerSaveResponseDto response = managerService.saveManager(authUser, todoId, managerSaveRequest);
 
         // then
         assertNotNull(response);

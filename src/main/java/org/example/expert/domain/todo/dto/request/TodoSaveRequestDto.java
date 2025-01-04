@@ -1,4 +1,4 @@
-package org.example.expert.domain.user.dto.request;
+package org.example.expert.domain.todo.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -8,10 +8,10 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserChangePasswordRequest {
+public class TodoSaveRequestDto {
 
     @NotBlank
-    private String oldPassword;
+    private String title;
     @NotBlank
-    private String newPassword;
+    private String contents;
 }
